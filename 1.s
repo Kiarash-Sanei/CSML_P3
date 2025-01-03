@@ -1,12 +1,9 @@
 global asm_main
-extern printf                    ; External C function for output
-extern scanf                    ; External C function for input
+extern printf
+extern scanf
 section .text
 asm_main:
-    ; Function prologue - set up stack frame
-    push rbp
-    mov rbp, rsp
-    sub rsp, 32                 ; Align stack and make room for local variables
+    sub rsp, 8                 ; Align stack and make room for local variables
 
     ; Read dimensions n, m, p from input
     mov rdi, scanf_format
@@ -141,8 +138,8 @@ asm_main:
         cmp r12d, DWORD [n]
         jl print_outer
 
-    ; Function epilogue and return
     mov eax, 0
+    add rsp ,8
     leave
     ret
 
@@ -152,6 +149,7 @@ size_error:
     xor eax, eax
     call printf
     mov eax, 1
+    add rsp ,8
     leave
     ret
 
