@@ -39,43 +39,35 @@ asm_main:
     jg size_error
 
     ; Read elements of first matrix
-    xor rbx, rbx               ; Initialize counter
+    xor r12, r12             ; Initialize counter
     input_loop1:
         mov rdi, scanf_format
-        lea rsi, [matrix1 + rbx * 4]    ; Calculate address of current element
+        lea rsi, [matrix1 + r12 * 4]    ; Calculate address of current element
         xor eax, eax
         call scanf
-        inc rbx                         ; Move to next element
-        cmp ebx, DWORD [size1]
+        inc r12                         ; Move to next element
+        cmp r12d, DWORD [size1]
         jl input_loop1                  ; Continue until all elements are read
 
     ; Read elements of second matrix
-    xor rbx, rbx               ; Initialize counter
+    xor r12, r12               ; Initialize counter
     input_loop2:
         mov rdi, scanf_format
-        lea rsi, [matrix2 + rbx * 4]    ; Calculate address of current element
+        lea rsi, [matrix2 + r12 * 4]    ; Calculate address of current element
         xor eax, eax
         call scanf
-        inc rbx                         ; Move to next element
-        cmp ebx, DWORD [size2]
+        inc r12                         ; Move to next element
+        cmp r12d, DWORD [size2]
         jl input_loop2                  ; Continue until all elements are read
-
-    ; Initialize result matrix with zeros
-    xor rbx, rbx               ; Initialize counter
-    init_loop:
-        mov DWORD [matrix3 + rbx * 4], 0
-        inc rbx
-        cmp ebx, DWORD [size3]
-        jl init_loop
 
     ; Perform matrix multiplication: matrix3[i][j] = Σ(matrix1[i][k] * matrix2[k][j])
     xor r12, r12              ; i = 0 (row index of first matrix)
-    outer_loop:
+    outer_multiplication_loop:
         xor r13, r13          ; j = 0 (column index of second matrix)
-        middle_loop:
+        middle_multiplication_loop:
             xor r14, r14      ; k = 0 (column index of first matrix/row index of second matrix)
-            mov r15d, 0       ; Initialize sum for current element
-            inner_loop:
+            xor r15, r15      ; Initialize sum for current element
+            inner_multiplication_loop:
                 ; Calculate index for matrix1[i][k]
                 mov rax, r12
                 imul eax, DWORD [m]
@@ -95,27 +87,27 @@ asm_main:
                 ; Move to next element in row/column
                 inc r14
                 cmp r14d, DWORD [m]
-                jl inner_loop
+                jl inner_multiplication_loop
 
-                ; Store result in matrix3[i][j]
-                mov rax, r12
-                imul eax, DWORD [p]
-                add rax, r13
-                mov DWORD [matrix3 + rax * 4], r15d
+            ; Store result in matrix3[i][j]
+            mov rax, r12
+            imul eax, DWORD [p]
+            add rax, r13
+            mov DWORD [matrix3 + rax * 4], r15d
 
             inc r13                    ; Move to next column in result
             cmp r13d, DWORD [p]
-            jl middle_loop
+            jl middle_multiplication_loop
 
         inc r12                        ; Move to next row in result
         cmp r12d, DWORD [n]
-        jl outer_loop
+        jl outer_multiplication_loop
 
     ; Print the resulting matrix
     xor r12, r12              ; i = 0 (row counter)
-    print_outer:
+    outer_print_loop:
         xor r13, r13          ; j = 0 (column counter)
-        print_inner:
+        inner_print_loop:
             ; Calculate and print matrix3[i][j]
             mov rax, r12
             imul eax, DWORD [p]
@@ -127,7 +119,7 @@ asm_main:
 
             inc r13                    ; Move to next column
             cmp r13d, DWORD [p]
-            jl print_inner
+            jl inner_print_loop
 
         ; Print newline after each row
         mov rdi, newline_format
@@ -136,7 +128,7 @@ asm_main:
 
         inc r12                        ; Move to next row
         cmp r12d, DWORD [n]
-        jl print_outer
+        jl outer_print_loop
 
     mov eax, 0
     add rsp ,8
