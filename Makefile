@@ -1,4 +1,4 @@
-ASM_NAME = 1.2
+ASM_NAME = 1.1
 OBJS= $(ASM_NAME).o main.o
 OUTPUT_NAME= exec
 
