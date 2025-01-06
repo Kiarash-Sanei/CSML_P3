@@ -1,8 +1,5 @@
-extern printf
-
-section .data
-    printf_format: db "%d ", 0         ; Format for printing integers with space
-    newline_format: db 10, 0           ; Newline character
+extern PI
+extern PN
 
 section .text
     global PIM
@@ -32,8 +29,7 @@ section .text
                 push rdx
 
                 mov esi, DWORD [rdx + rax * 4]  ; Get matrix[i][j]
-                mov rdi, printf_format
-                call printf                      ; Print the number
+                call PI                      ; Print the number
 
                 pop rdx ; Restore preserved registers
                 pop rsi
@@ -48,8 +44,7 @@ section .text
             push rsi
             push rdx
             ; Print newline at end of each row
-            mov rdi, newline_format
-            call printf
+            call PN
 
             pop rdx
             pop rsi
