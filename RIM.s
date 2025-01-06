@@ -18,8 +18,7 @@ section .text
             push rdi      ; Save rdi before scanf call
             push rdx      ; Save rdx before scanf call
             
-            lea rsi, [rdx + r12 * 4]  ; Calculate address for current element
-                                      ; matrix[i] = base + i * 4 (4 bytes per int)
+            lea rsi, [rdx + r12 * 4]  ; matrix[i] = base + i * 4 (4 bytes per int)
             call RI                    ; Read one integer using RI function
             
             pop rdx       ; Restore rdx after scanf
@@ -30,7 +29,7 @@ section .text
 
         pop r12           ; Restore preserved registers
         pop rbx
-        
+
         mov rax, 0
         add rsp, 32
         leave
