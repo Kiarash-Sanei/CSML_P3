@@ -14,3 +14,4 @@ gcc 1.1.o RI.o CMS.o RIM.o MIM.o PIM.o PI.o PN.o -o 1.1.out -no-pie
 rm *.o &>/dev/null
 echo "Done!"
 ./1.1.out
+rm *.out &>/dev/null
