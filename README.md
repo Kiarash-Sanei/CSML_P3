@@ -35,4 +35,19 @@ This project implements various matrix operations in x86_64 assembly language. I
 
 ## Building and Running
 
-Each program has its own shell script (*.sh) for building and running. For example:
+Each program has its own shell script (*.sh) for building and running.
+
+## Error Handling
+- All programs include size validation using CMS (Check Matrix Size)
+- Maximum matrix size is defined as 10000 elements
+- Returns error code 1 if matrix size exceeds limit
+
+## Testing
+The project includes C test programs (in tests/ directory) for:
+- Generating test matrices with random values
+- Verifying results of assembly implementations
+
+## Dependencies
+- NASM assembler
+- GCC compiler
+- Linux x86_64 environment
