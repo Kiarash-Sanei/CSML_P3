@@ -1,11 +1,11 @@
 global main
 extern RI
 extern CMS
-extern RIM
-extern TIM
-extern MIM
-extern TIMC
-extern PI
+extern RFM
+extern TFM
+extern MPFM
+extern TFMC
+extern PF
 extern PN
 
 section .data
@@ -14,10 +14,10 @@ section .data
 section .bss
     n: resd 1                  ; Number of rows
     m: resd 1                  ; Number of columns
-    matrix1: resd 10000        ; First input matrix
-    matrix2: resd 10000        ; Second input matrix
-    matrix3: resd 10000        ; Transpose of first matrix
-    matrix4: resd 10000        ; Storage for result matrix
+    matrix1: resq 10000        ; First input matrix
+    matrix2: resq 10000        ; Second input matrix
+    matrix3: resq 10000        ; Transpose of first matrix
+    matrix4: resq 10000        ; Storage for result matrix
 
 section .text
 main:
@@ -44,19 +44,19 @@ main:
     mov edi, DWORD [n]
     mov esi, DWORD [m]
     lea rdx, [matrix1]
-    call RIM
+    call RFM
 
     mov edi, DWORD [n]
     mov esi, DWORD [m]
     lea rdx, [matrix2]
-    call RIM
+    call RFM
 
     ; Transpose matrix1 and store in matrix3
     mov edi, DWORD [n]
     mov esi, DWORD [m]
     lea rdx, [matrix1]
     lea rcx, [matrix3]
-    call TIM
+    call TFM
 
     ; Multiply matrix3 and matrix2 and store in matrix4
     mov edi, DWORD [m]      ; First matrix rows (m)
@@ -65,16 +65,16 @@ main:
     lea rcx, [matrix3]      ; First matrix (A^T)
     lea r8, [matrix2]       ; Second matrix (B)
     lea r9, [matrix4]       ; Result matrix (C)
-    call MIM
+    call MPFM
 
     ; Calculate trace of the resulting matrix
     mov edi, DWORD [m]
     lea rsi, [matrix4]
-    call TIMC
+    call TFMC
 
     ; Print the trace of the matrix
     mov rsi, rax              ; Set trace value as argument
-    call PI
+    call PF
     call PN
 
     mov rax, 0
